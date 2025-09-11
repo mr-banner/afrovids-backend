@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 dotenv.config({ quiet: true });
 
-const DB_URL = process.env.Database_URL;
+const DB_URL = process.env.DB_URL;
 export const connectDB = async () =>{
     try {
         const connectionInstance = await mongoose.connect(`${DB_URL}/afrovids`)
