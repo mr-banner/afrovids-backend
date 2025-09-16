@@ -54,7 +54,7 @@ export const getUserById = async (req, res) => {
     }
     const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decodedUser.id).select(
-      "name email avatar"
+      "-googleId -__v"
     );
 
     if (!user) {
@@ -70,5 +70,57 @@ export const getUserById = async (req, res) => {
   } catch (error) {
     console.error(err);
     res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+export const updateUser = async (req, res) => {
+  try {
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    if (!token) {
+      return res
+        .status(401)
+        .json({ success: false, message: "Not authenticated" });
+    }
+
+    const decodedUser = jwt.verify(token, process.env.JWT_SECRET);
+    const updateFileds = {};
+    const allowedFields = ["name", "bio", "phone", "location", "avatar"];
+    allowedFields.forEach((field) => {
+      if (req.body[field] !== undefined) updateFileds[field] = req.body[field];
+    });
+
+    const updatedUser = await User.findByIdAndUpdate(
+      decodedUser.id,
+      updateFileds,
+      {
+        new: true,
+        runValidators: true,
+      }
+    ).select("-googleId");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Profile updated successfully!",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    if (error.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "A user with that email already exists.",
+      });
+    }
+
+    res.status(500).json({
+      success: false,
+      message: "Server error. Could not update user.",
+    });
   }
 };
