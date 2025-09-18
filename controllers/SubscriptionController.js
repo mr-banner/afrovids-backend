@@ -52,7 +52,7 @@ export const confirmSubscription = async (req, res) => {
       },
     });
 
-    res.json({ success: true, message: "Subscription activated" });
+    res.json({ success: true, message: "Subscription activated successfully" });
   } catch (err) {
     console.error("Confirm error:", err);
     res.status(500).json({ success: false, message: "Failed to confirm subscription" });
