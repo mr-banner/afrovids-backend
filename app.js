@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./config/db.js";
 import userRoutes from "./routes/userRouts.js";
+import subScribeRoutes from "./routes/subscribeRoutes.js"
 
 dotenv.config({ quiet: true });
 
@@ -19,6 +20,7 @@ app.use(
 );
 app.use(cookieParser());
 app.use("/api/auth", userRoutes);
+app.use("/api/subscribe",subScribeRoutes)
 connectDB();
 
 export default app;
