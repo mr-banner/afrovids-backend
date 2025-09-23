@@ -30,12 +30,12 @@ export const googleAuth = async (req, res) => {
         avatar: payload.picture,
       });
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
+        expiresIn: "7d",
       });
       return res.status(201).json({ success: true, token });
     }
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "7d",
     });
     res.status(200).json({ success: true, token });
   } catch (error) {

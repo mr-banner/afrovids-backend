@@ -5,7 +5,7 @@ import isProtected from "../middlewares/authMiddleware.js";
 const router = Router();
 
 router.post("/google", googleAuth);
-router.put("/updateUser", updateUser)
+router.put("/updateUser",isProtected, updateUser)
 router.get("/getUser",isProtected, getUserById);
 
 export default router;
